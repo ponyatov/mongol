@@ -1,4 +1,3 @@
-# rule
 bin/$(BINFILE): $(C) $(H) $(CP) $(HP)
 	$(CXX) $(CFLAGS) -o $@ $(C) $(CP) $(L)
 tmp/%.yacc.cpp: src/%.yacc

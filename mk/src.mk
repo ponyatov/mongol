@@ -6,5 +6,4 @@ H  += $(wildcard inc/*.h*)
 CP += tmp/$(APP).yacc.cpp tmp/$(APP).lex.cpp
 HP += tmp/$(APP).yacc.hpp
 
-S  += $(wildcard lib/*.ini lib/*.f)
-
+S  += $(wildcard lib/*.ini) $(wildcard lib/*.f)

@@ -10,6 +10,7 @@ int main(int argc, char *argv[]) {
         fclose(yyin);
         yyfile = nullptr;
     }
+    vm();
 }
 
 void arg(int argc, char *argv) {  //
@@ -23,6 +24,15 @@ void yyerror(const char *msg) {
 
 byte M[Msz];
 addr Cp = 0;
-addr Ip = 0;
+addr Ip = -1;
 
 std::map<std::string, addr> label;
+
+void vm() {
+    assert(Ip < Cp);
+    Op op = (Op)M[Ip++];
+    switch (op) {
+        default:
+            abort();
+    }
+}
