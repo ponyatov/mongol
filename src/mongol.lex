@@ -19,8 +19,10 @@ alnum [a-zA-Z_0-9]
 <comment>"*/"   {BEGIN(INITIAL);}
 <comment>.      {}
 
-":"             {return COLON;}
+"nop"           {yylval.op = Op::nop ; return CMD0;}
+"halt"          {yylval.op = Op::halt; return CMD0;}
 
+":"             {return COLON;}
 {alpha}{alnum}* {yylval.s = new std::string(yytext); return ID;}
 
 [ \t\r\n]+      {}                  // drop spaces

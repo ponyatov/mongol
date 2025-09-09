@@ -10,6 +10,7 @@
 %%
 syntax : | syntax ex
 
-ex: COLON ID        { fprintf(stderr,":%s\n",$2->c_str());
+ex: COLON ID        { fprintf(stderr,":%s\t%.4X\n",$2->c_str(),Cp);
                         label[*$2]=Cp; Ip=Cp; }
-  | CMD0            { fprintf(stderr,"%.2X",$1); compile($1); }
+  | CMD0            { fprintf(stderr,"%.2X",$1);
+                        compile($1); }

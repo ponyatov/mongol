@@ -28,11 +28,53 @@ addr Ip = -1;
 
 std::map<std::string, addr> label;
 
+addr compile(Op op) { return compile((byte)op); }
+
+addr compile(byte b) {
+    assert(Cp + sizeof(byte) < Msz);
+    M[Cp] = b;
+    Cp += sizeof(byte);
+    return Cp;
+}
+
+addr compile(addr a) {
+    assert(Cp + sizeof(addr) < Msz);
+    *(addr *)&M[Cp] = a;
+    Cp += sizeof(addr);
+    return Cp;
+}
+
+addr compile(cell c) {
+    assert(Cp + sizeof(cell) < Msz);
+    *(cell *)&M[Cp] = c;
+    Cp += sizeof(cell);
+    return Cp;
+}
+
 void vm() {
     assert(Ip < Cp);
     Op op = (Op)M[Ip++];
+    fprintf(stderr, "\n%.4X: %.2X ", Ip - 1, op);
     switch (op) {
+        case Op::nop:
+            nop();
+            break;
+        case Op::halt:
+            halt();
+            break;
         default:
-            abort();
+            fprintf(stderr, " unknown command\n\n");
+            exit(-1);
     }
+}
+
+bool trace = true;
+
+void nop() {
+    if (trace) fprintf(stderr, "nop");
+}
+
+void halt() {
+    if (trace) fprintf(stderr, "halt\n");
+    exit(0);
 }

@@ -21,19 +21,6 @@ extern int main(int argc, char *argv[]);
 extern void arg(int argc, char *argv);
 /// @}
 
-/// @defgroup parser parser
-/// @ingroup compiler
-/// @{
-extern int yylex();
-extern FILE *yyin;
-extern char *yyfile;
-extern char *yytext;
-extern int yylineno;
-extern int yyparse();
-extern void yyerror(const char *msg);
-#include "mongol.yacc.hpp"
-/// @}
-
 /// @defgroup types types
 /// @ingroup vm
 /// @{
@@ -72,10 +59,15 @@ extern byte Dp;
 
 extern void vm();
 
+extern bool trace;
+
 enum class Op {
-    nop = 0x00,  ///<
-    halt = 0xFF  ///<
+    nop = 0x00,   ///<
+    halt = 0xFF,  ///<
 };
+
+extern void nop();
+extern void halt();
 
 /// @}
 
@@ -85,5 +77,21 @@ enum class Op {
 extern std::map<std::string, addr> label;
 
 extern addr compile(Op op);
+extern addr compile(byte b);
+extern addr compile(addr a);
+extern addr compile(cell c);
 
+/// @}
+
+/// @defgroup parser parser
+/// @ingroup compiler
+/// @{
+extern int yylex();
+extern FILE *yyin;
+extern char *yyfile;
+extern char *yytext;
+extern int yylineno;
+extern int yyparse();
+extern void yyerror(const char *msg);
+#include "mongol.yacc.hpp"
 /// @}
