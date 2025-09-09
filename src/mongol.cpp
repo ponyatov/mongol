@@ -51,20 +51,41 @@ addr compile(cell c) {
     return Cp;
 }
 
+void tpush(addr a) {
+    assert(Tp < Tsz);
+    T[Tp++] = a;
+}
+
+addr tpop() {
+    assert(Tp > 0);
+    return T[--Tp];
+}
+
+addr T[Tsz];
+byte Tp = 0;
+
 void vm() {
-    assert(Ip < Cp);
-    Op op = (Op)M[Ip++];
-    fprintf(stderr, "\n%.4X: %.2X ", Ip - 1, op);
-    switch (op) {
-        case Op::nop:
-            nop();
-            break;
-        case Op::halt:
-            halt();
-            break;
-        default:
-            fprintf(stderr, " unknown command\n\n");
-            exit(-1);
+    for (;;) {
+        assert(Ip < Cp);
+        Op op = (Op)M[Ip++];
+        fprintf(stderr, "\n%.4X: %.2X ", Ip - 1, op);
+        switch (op) {
+            case Op::nop:
+                nop();
+                break;
+            case Op::halt:
+                halt();
+                break;
+            case Op::key:
+                key();
+                break;
+            case Op::emit:
+                emit();
+                break;
+            default:
+                fprintf(stderr, " unknown command\n\n");
+                exit(-1);
+        }
     }
 }
 
@@ -77,4 +98,30 @@ void nop() {
 void halt() {
     if (trace) fprintf(stderr, "halt\n");
     exit(0);
+}
+
+cell D[Dsz];
+byte Dp = 0;
+
+void push(cell c) {
+    assert(Dp < Dsz);
+    D[Dp++] = c;
+}
+
+cell pop() {
+    assert(Dp > 0);
+    return D[--Dp];
+}
+
+void key() {
+    if (trace) fprintf(stderr, "key");
+    // push(getchar());
+    push('A');
+}
+
+void emit() {
+    if (trace) fprintf(stderr, "emit ");
+    byte c = pop();
+    if (trace) fprintf(stderr, "%.2X", c);
+    putchar(c);
 }
